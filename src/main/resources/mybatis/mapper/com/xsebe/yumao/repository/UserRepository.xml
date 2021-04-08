@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.UserRepository">
+    <parameterMap id="userParameter" type="User" />
+
+    <resultMap id="userResult" type="User">
+        <id property="id" column="id" />
+        <result property="username" column="username" />
+        <result property="loginPasswordCipher" column="login_password_cipher" />
+        <result property="loginPasswordSalt" column="login_password_salt" />
+        <result property="userType" column="user_type" />
+        <result property="mobile" column="mobile" />
+        <result property="email" column="email" />
+        <result property="entUniCreditCode" column="ent_uni_credit_code" />
+        <result property="entContactsRealname" column="ent_contacts_realname" />
+        <result property="entContactsMobile" column="ent_contacts_mobile" />
+        <result property="registeredTime" column="registered_time" />
+    </resultMap>
+
+    <parameterMap id="userRealnameAuthParameter" type="UserRealnameAuth" />
+
+    <resultMap id="userRealnameAuthResult" type="UserRealnameAuth">
+        <id property="id" column="id" />
+        <result property="realname" column="realname" />
+        <result property="idcard" column="idcard" />
+        <result property="bankCardNo" column="bank_card_no" />
+        <result property="bankReservedMobile" column="bank_reserved_mobile" />
+        <result property="entName" column="ent_name" />
+        <result property="entBankName" column="ent_bank_name" />
+        <result property="entBankNoDictValue" column="ent_bank_no_dict_value" />
+        <result property="entBankPublicAccountNo" column="ent_bank_public_account_no" />
+        <result property="entIdPicture" column="ent_id_picture" />
+        <result property="status" column="status" />
+        <result property="failureCause" column="failure_cause" />
+        <association property="user" column="user_id" select="com.xsebe.yumao.repository.UserRepository.get" />
+    </resultMap>
+
+    <parameterMap id="userFxServiceConfigParameter" type="UserFxServiceConfig" />
+
+    <resultMap id="userFxServiceConfigResult" type="UserFxServiceConfig">
+        <id property="id" column="id" />
+        <result property="fxUserId" column="fx_user_id" />
+        <result property="fxUserPublicKey" column="fx_user_public_key" />
+        <association property="user" column="user_id" select="com.xsebe.yumao.repository.UserRepository.get" />
+    </resultMap>
+
+    <select id="get" parameterType="java.lang.String" resultMap="userResult">
+        SELECT * FROM `user` t1 WHERE t1.`id`=#{id}
+    </select>
+
+    <!-- <select id="getByUsername" parameterType="java.lang.String" resultMap="userResult"> select t1.mobile from `user` t1 where t1.`username`= #{username} </select> -->
+
+    <select id="getByUsernameOrMobileOrEmail" parameterType="java.lang.String" resultMap="userResult">
+        SELECT t1.* FROM `user` t1 WHERE (t1.`username`=#{username} OR
+        t1.`mobile`=#{mobile}
+        OR
+        t1.`email`=#{email}) AND t1.`user_type`=1
+    </select>
+
+    <select id="getByUsernameOrEntUniCreditCode" resultMap="userResult">
+        SELECT t1.* FROM `user` t1 WHERE
+        (t1.`username`=#{username} OR
+        t1.`ent_uni_credit_code`=#{entUniCreditCode}) AND
+        t1.`user_type`=2
+    </select>
+
+    <select id="getRealnameAuth" parameterType="java.lang.String" resultMap="userRealnameAuthResult">
+        SELECT * FROM `user_realname_auth` t1 WHERE t1.`user_id`=#{id}
+    </select>
+
+    <select id="getFxServiceConfig" parameterType="java.lang.String" resultMap="userFxServiceConfigResult">
+        SELECT * FROM `user_fxservice_config` t1 WHERE t1.`user_id`=#{id}
+    </select>
+
+    <select id="getFxServiceConfigByFxUserId" parameterType="java.lang.String" resultMap="userFxServiceConfigResult">
+        SELECT * FROM `user_fxservice_config` t1 WHERE
+        t1.`fx_user_id`=#{fxUserId}
+    </select>
+
+    <select id="getByOriginalWorksId" parameterType="java.lang.String" resultMap="userResult">
+        SELECT t2.* FROM `user` t2 INNER JOIN (
+        SELECT t1.`user_id`
+        FROM
+        `user_original_works_link`
+        t1
+        WHERE t1.`original_works_id`=#{originalWorksId}
+        ) t3 ON t2.`id`=t3.`user_id`
+    </select>
+
+    <insert id="add" parameterMap="userParameter">
+        INSERT INTO `user`
+        (`id`,`username`,`login_password_cipher`,`login_password_salt`,`user_type`,`mobile`,`email`,`ent_uni_credit_code`,`ent_contacts_realname`,`ent_contacts_mobile`,`registered_time`)
+        VALUES (#{user.id}, #{user.username},
+        #{user.loginPasswordCipher},#{user.loginPasswordSalt},#{user.userType},#{user.mobile},#{user.email},#{user.entUniCreditCode},#{user.entContactsRealname},#{user.entContactsMobile},#{user.registeredTime})
+    </insert>
+
+    <insert id="addRealnameAuth" parameterMap="userRealnameAuthParameter">
+        INSERT INTO `user_realname_auth`
+        (`id`,`user_id`,`realname`,`idcard`,`bank_card_no`,`bank_reserved_mobile`,`ent_name`,`ent_bank_name`,`ent_bank_no_dict_value`,`ent_bank_public_account_no`,`ent_id_picture`,`status`,`failure_cause`)
+        VALUES
+        (#{user_realname_auth.id},#{user_realname_auth.user.id},
+        #{user_realname_auth.realname},
+        #{user_realname_auth.idcard},#{user_realname_auth.bankCardNo},#{user_realname_auth.bankReservedMobile},#{user_realname_auth.entName},#{user_realname_auth.entBankName},#{user_realname_auth.entBankNoDictValue},#{user_realname_auth.entBankPublicAccountNo},#{user_realname_auth.entIdPicture},#{user_realname_auth.status},#{user_realname_auth.failureCause})
+    </insert>
+
+    <insert id="addFxServiceConfig" parameterMap="userFxServiceConfigParameter">
+        INSERT INTO `user_fxservice_config` (`id`,`user_id`,`fx_user_id`,`fx_user_public_key`)
+        VALUES
+        (#{user_fxservice_config.id},#{user_fxservice_config.user.id}, #{user_fxservice_config.fxUserId},
+        #{user_fxservice_config.fxUserPublicKey})
+    </insert>
+    <update id="updateFxServiceConfigByUserId">
+        UPDATE `user_fxservice_config` t1 SET t1.`fx_user_id`=#{user_fxservice_config.fxUserId}, t1.`fx_user_public_key`=#{user_fxservice_config.fxUserPublicKey} WHERE t1.`user_id`=#{user_fxservice_config.user.id}
+    </update>
+    
+    <!-- 通过id或者username或mobile修改密码 -->
+    <update id="updateUserPass" parameterMap="userParameter">
+        update `user` set `login_password_cipher` = #{user.loginPasswordCipher} , `login_password_salt` = #{user.loginPasswordSalt}
+        where (
+        `user`.`id`=#{user.id} OR `user`.`username`=#{user.username}
+        )
+    </update>
+
+    <update id="updateRealnameAuth" parameterMap="userRealnameAuthParameter">
+        UPDATE `user_realname_auth` t1
+        <choose>
+            <when test="userType == 1">
+                <set>
+                    <if test="userRealnameAuth.realname != null">
+                        t1.`realname` = #{userRealnameAuth.realname},
+                    </if>
+                    <if test="userRealnameAuth.idcard != null">
+                        t1.`idcard` = #{userRealnameAuth.idcard},
+                    </if>
+                    <if test="userRealnameAuth.bankCardNo != null">
+                        t1.`bank_card_no` = #{userRealnameAuth.bankCardNo},
+                    </if>
+                    <if test="userRealnameAuth.bankReservedMobile != null">
+                        t1.`bank_reserved_mobile` = #{userRealnameAuth.bankReservedMobile},
+                    </if>
+                    <if test="userRealnameAuth.status != null">
+                        t1.`status` = #{userRealnameAuth.status},
+                    </if>
+                    <if test="userRealnameAuth.failureCause != null">
+                        t1.`failure_cause` = #{userRealnameAuth.failureCause},
+                    </if>
+                </set>
+            </when>
+            <otherwise>
+                <set>
+                    <if test="userRealnameAuth.entName != null">
+                        t1.`ent_name` = #{userRealnameAuth.entName},
+                    </if>
+                    <if test="userRealnameAuth.entBankName != null">
+                        t1.`ent_bank_name` = #{userRealnameAuth.entBankName},
+                    </if>
+                    <if test="userRealnameAuth.entBankNoDictValue != null">
+                        t1.`ent_bank_no_dict_value` = #{userRealnameAuth.entBankNoDictValue},
+                    </if>
+                    <if test="userRealnameAuth.entBankPublicAccountNo != null">
+                        t1.`ent_bank_public_account_no` = #{userRealnameAuth.entBankPublicAccountNo},
+                    </if>
+                    <if test="userRealnameAuth.entIdPicture != null">
+                        t1.`ent_id_picture` = #{userRealnameAuth.entIdPicture},
+                    </if>
+                    <if test="userRealnameAuth.status != null">
+                        t1.`status` = #{userRealnameAuth.status},
+                    </if>
+                    <if test="userRealnameAuth.failureCause != null">
+                        t1.`failure_cause` = #{userRealnameAuth.failureCause},
+                    </if>
+                </set>
+            </otherwise>
+        </choose>
+        WHERE t1.`id`=#{userRealnameAuth.id}
+    </update>
+    
+    <update id="updateMobile">
+        UPDATE `user` SET
+        <if test="user.userType == 1">
+            `mobile` = #{mobile}
+        </if>
+        <if test="user.userType == 2">
+            `ent_contacts_mobile` = #{mobile}
+        </if>
+        WHERE `id` = #{user.id}
+    </update>
+</mapper>

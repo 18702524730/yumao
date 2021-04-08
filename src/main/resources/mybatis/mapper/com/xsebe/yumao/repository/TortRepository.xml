@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.TortRepository">
+
+    <resultMap id="tortInfoResutMap" type="TortInfo">
+        <id property="id" column="id" />
+        <result property="goodsUrl" column="goods_url" />
+        <result property="worksName" column="works_name" />
+        <result property="rightsProtectionStatus" column="rights_protection_status" />
+        <result property="submitTime" column="submit_time" />
+        <association property="user" column="user_id" select="com.xsebe.yumao.repository.UserRepository.get" />
+    </resultMap>
+
+    <resultMap id="tortLogResultMap" type="TortLog">
+        <id property="id" column="id" />
+        <result property="tortInfoStatus" column="tort_info_status" />
+        <result property="modifyReason" column="modify_reason" />
+        <result property="remark" column="remark" />
+        <result property="operationTime" column="operation_time" />
+        <association property="tortInfo" column="tort_info_id" select="com.xsebe.yumao.repository.TortRepository.getTortInfo" />
+    </resultMap>
+
+    <select id="getTortInfo" resultMap="tortInfoResutMap">
+        SELECT * FROM `tort_info` WHERE `id` = #{id}
+    </select>
+
+    <select id="getTortInfoTotal" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM `tort_info` t1 WHERE t1.`user_id` = #{userId}
+        <if test="name != null and name != ''">
+            AND `works_name` LIKE CONCAT('%',#{name}, '%')
+        </if>
+    </select>
+
+    <select id="getsTortInfoLimit" resultMap="tortInfoResutMap">
+        SELECT t1.* FROM `tort_info` t1 WHERE t1.`user_id` = #{userId}
+        <if test="name != null and name != ''">
+            AND t1.`works_name` LIKE CONCAT('%',#{name}, '%')
+        </if>
+        ORDER BY t1.`submit_time` DESC LIMIT ${offset},${limit}
+    </select>
+
+    <select id="getsTortLogList" resultMap="tortLogResultMap">
+        SELECT t1.* FROM `tort_log` t1 WHERE t1.`tort_info_id` = #{tortInfoId}
+        ORDER BY t1.`operation_time` ASC
+    </select>
+
+    <select id="getsByGoodsUrl" resultMap="tortInfoResutMap">
+        SELECT * FROM `tort_info` WHERE `user_id` = #{userId} AND `goods_url` = #{goodsUrl}
+    </select>
+
+    <select id="listByStatus" resultMap="tortInfoResutMap">
+        SELECT * FROM `tort_info` WHERE `user_id` = #{userId}
+        <if test="rightsProtectionStatus != null and rightsProtectionStatus.length > 0">
+            AND `rights_protection_status` IN
+            <foreach collection="rightsProtectionStatus" item="status" open="(" close=")" separator=",">
+                #{status}
+            </foreach>
+        </if>
+    </select>
+
+    <insert id="addTortLog">
+        INSERT INTO `tort_log`(`id`,`tort_info_status`,`tort_info_id`,`modify_reason`,`remark`,`operation_time`)
+        VALUES(#{tortLog.id},#{tortLog.tortInfoStatus},#{tortLog.tortInfo.id},#{tortLog.modifyReason},#{tortLog.remark},NOW())
+    </insert>
+
+    <insert id="addTortInfo">
+        INSERT INTO `tort_info`(`id`,`user_id`,`goods_url`,`works_name`,`rights_protection_status`,`submit_time`)
+        VALUES(#{tortInfo.id},#{tortInfo.user.id},#{tortInfo.goodsUrl},#{tortInfo.worksName},#{tortInfo.rightsProtectionStatus},NOW())
+    </insert>
+
+    <insert id="addTortInfoAndOriginalWorks">
+        INSERT INTO `tort_info_original_works`(`tort_info_id`,`original_works_id`)
+        VALUES(#{tortInfoId},#{originalWorksId})
+    </insert>
+
+    <update id="updateTortInfo">
+        UPDATE `tort_info` SET `goods_url` = #{tortInfo.goodsUrl} ,`works_name` = #{tortInfo.worksName}, `rights_protection_status` =
+        #{tortInfo.rightsProtectionStatus} WHERE `id` = #{tortInfo.id}
+    </update>
+
+    <update id="updateTortInfoStatus">
+        UPDATE `tort_info` SET `rights_protection_status` = #{status} WHERE `id` = #{tortInfoId}
+    </update>
+
+    <delete id="delTortInfoById">
+        DELETE FROM `tort_info` WHERE `id` = #{tortInfoId}
+    </delete>
+
+    <delete id="delTortInfoAndOriginal">
+        DELETE FROM `tort_info_original_works` WHERE `tort_info_id` = #{tortInfoId}
+    </delete>
+
+    <delete id="delTortInfoAndTortLog">
+        DELETE FROM `tort_log` WHERE `tort_info_id` = #{tortInfoId}
+    </delete>
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.EvidChainCategoryNodeRepository">
+    <resultMap id="evidChainCategoryNodeResult" type="EvidChainCategoryNode">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="isMasterPic" column="is_master_pic" />
+        <result property="sort" column="sort" />
+        <association property="evidChainCategory" column="evid_chain_category_id" select="com.xsebe.yumao.repository.EvidChainCategoryRepository.get"></association>
+    </resultMap>
+
+    <select id="get" resultMap="evidChainCategoryNodeResult">
+        SELECT * FROM `evid_chain_category_node` WHERE `id` = #{id}
+    </select>
+    
+    <select id="getByCategoryId" resultMap="evidChainCategoryNodeResult">
+        SELECT * FROM `evid_chain_category_node` WHERE `evid_chain_category_id` = #{categoryId}
+    </select>
+</mapper>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration>
+    <Properties>
+        <Property name="baseDir">/var/log/yumao/${mvn.env}/logs</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- <Console name="Console" target="SYSTEM_OUT"> -->
+        <!-- <PatternLayout> -->
+        <!-- <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %-5level %msg - %l%n</Pattern> -->
+        <!-- </PatternLayout> -->
+        <!-- </Console> -->
+        <RollingFile name="Stdout" fileName="${baseDir}/stdout.log" filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/stdout-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %-5level %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="Info" fileName="${baseDir}/info.log" filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/info-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="Error" fileName="${baseDir}/error.log" filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/error-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %-5level %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="AlicloudMarketBusiness" fileName="${baseDir}/alicloud-market-business.log"
+            filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/alicloud-market-business-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="AlicloudMarketError" fileName="${baseDir}/alicloud-market-error.log"
+            filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/alicloud-market-error-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %-5level %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="AlipayBusiness" fileName="${baseDir}/alipay-business.log"
+            filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/alipay-business-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="AlipayError" fileName="${baseDir}/alipay-error.log"
+            filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/alipay-error-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %-5level %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="FxServiceBusiness" fileName="${baseDir}/fx-service-business.log" filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/fx-service-business-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+        <RollingFile name="FxServiceError" fileName="${baseDir}/fx-service-error.log" filePattern="${baseDir}/$${date:yyyy-MM}/$${date:yyyy-MM-dd}/fx-service-error-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %-5level %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="50 MB" />
+            </Policies>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.xsebe.yumao.repository" level="warn" additivity="false">
+            <AppenderRef ref="Stdout" />
+        </Logger>
+
+        <Logger name="com.xsebe.yumao.log.InfoLogger" level="info" additivity="false">
+            <AppenderRef ref="Info" />
+        </Logger>
+
+        <Logger name="com.xsebe.yumao.log.ErrorLogger" level="warn" additivity="false">
+            <AppenderRef ref="Error" />
+        </Logger>
+
+        <Logger name="com.xsebe.api.docking.alibaba.alicloud.market.log.BusinessLogger" level="info" additivity="false">
+            <AppenderRef ref="AlicloudMarketBusiness" />
+        </Logger>
+
+        <Logger name="com.xsebe.api.docking.alibaba.alicloud.market.log.ErrorLogger" level="warn" additivity="false">
+            <AppenderRef ref="AlicloudMarketError" />
+        </Logger>
+
+        <Logger name="com.xsebe.api.docking.alibaba.alipay.log.BusinessLogger" level="info" additivity="false">
+            <AppenderRef ref="AlipayBusiness" />
+        </Logger>
+
+        <Logger name="com.xsebe.api.docking.alibaba.alipay.log.ErrorLogger" level="warn" additivity="false">
+            <AppenderRef ref="AlipayError" />
+        </Logger>
+
+        <Logger name="com.xsebe.api.docking.faxin.fxservice.log.BusinessLogger" level="info" additivity="false">
+            <AppenderRef ref="FxServiceBusiness" />
+        </Logger>
+
+        <Logger name="com.xsebe.api.docking.faxin.fxservice.log.ErrorLogger" level="warn" additivity="false">
+            <AppenderRef ref="FxServiceError" />
+        </Logger>
+
+        <Logger name="org.mybatis" level="warn" additivity="false">
+            <AppenderRef ref="Stdout" />
+        </Logger>
+
+        <Logger name="org.apache" level="warn" additivity="false">
+            <AppenderRef ref="Stdout" />
+        </Logger>
+
+        <Logger name="org.springframework" level="warn" additivity="false">
+            <AppenderRef ref="Stdout" />
+        </Logger>
+
+        <Root level="debug">
+            <AppenderRef ref="Stdout" />
+        </Root>
+    </Loggers>
+</Configuration>

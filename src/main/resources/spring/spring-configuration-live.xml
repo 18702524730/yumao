@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-4.1.xsd">
+
+    <util:map id="settings" scope="singleton">
+        <entry key="external_url">
+            <value><![CDATA[http://www.xsebe.com/]]></value>
+        </entry>
+        <entry key="upload_url">
+            <value><![CDATA[http://www.xsebe.com/upload/]]></value>
+        </entry>
+        <entry key="upload_absolute_path">
+            <value><![CDATA[/opt/upload/yumao/live/]]></value>
+        </entry>
+    </util:map>
+
+    <util:map id="sms" scope="singleton">
+        <entry key="uri">
+            <value><![CDATA[https://feginesms.market.alicloudapi.com/codeNotice]]></value>
+        </entry>
+        <entry key="app_code">
+            <value><![CDATA[309fc6b27c45473a8bca3991b5e1b578]]></value>
+        </entry>
+        <entry key="verifycode_sign_id">
+            <value><![CDATA[44921]]></value>
+        </entry>
+        <entry key="verifycode_skin_id">
+            <value><![CDATA[34173]]></value>
+        </entry>
+        <entry key="verifycode_expiry_minutes">
+            <value><![CDATA[10]]></value>
+        </entry>
+        <entry key="realname_auth_remittance_success_sign_id">
+            <value><![CDATA[44921]]></value>
+        </entry>
+        <entry key="realname_auth_remittance_success_skin_id">
+            <value><![CDATA[35028]]></value>
+        </entry>
+        <entry key="realname_auth_remittance_failure_sign_id">
+            <value><![CDATA[44921]]></value>
+        </entry>
+        <entry key="realname_auth_remittance_failure_skin_id">
+            <value><![CDATA[35027]]></value>
+        </entry>
+        <entry key="openservice_sign_id">
+            <value><![CDATA[44921]]></value>
+        </entry>
+        <entry key="openservice_skin_id">
+            <value><![CDATA[34727]]></value>
+        </entry>
+    </util:map>
+
+    <util:map id="realnameAuth" scope="singleton">
+        <entry key="uri">
+            <value><![CDATA[https://jisubank4.market.alicloudapi.com/bankcardverify4/verify]]></value>
+        </entry>
+        <entry key="app_code">
+            <value><![CDATA[309fc6b27c45473a8bca3991b5e1b578]]></value>
+        </entry>
+    </util:map>
+
+    <util:map id="fxService" scope="singleton">
+        <entry key="uri">
+            <value><![CDATA[https://www.egongzheng.com/FxService]]></value>
+        </entry>
+        <entry key="app_id">
+            <value><![CDATA[20180627@xinshibeijk]]></value>
+        </entry>
+        <entry key="key">
+            <value><![CDATA[f469f3b4ec82ebe6ef8ce724a63a6c98]]></value>
+        </entry>
+        <entry key="register_version">
+            <value><![CDATA[1.0]]></value>
+        </entry>
+        <entry key="realname_auth_version">
+            <value><![CDATA[1.0]]></value>
+        </entry>
+        <entry key="submit_protect_version">
+            <value><![CDATA[2.0]]></value>
+        </entry>
+        <entry key="download_voucher_img_version">
+            <value><![CDATA[2.0]]></value>
+        </entry>
+    </util:map>
+
+    <!-- 数据库配置 -->
+    <util:map id="jdbc" scope="singleton">
+        <entry key="driverClassName">
+            <value><![CDATA[com.mysql.jdbc.Driver]]></value>
+        </entry>
+        <entry key="url">
+            <value><![CDATA[jdbc:mysql://172.16.194.125:3306/yumao_live?characterEncoding=UTF8]]></value>
+        </entry>
+        <entry key="username">
+            <value><![CDATA[yumao_live]]></value>
+        </entry>
+        <entry key="password">
+            <value><![CDATA[mf32mW#oiJITOSD-BFg]]></value>
+        </entry>
+    </util:map>
+
+</beans>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.RoleRepository">
+    <parameterMap id="roleParameter" type="Role" />
+
+    <resultMap id="roleResult" type="Role">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="label" column="label" />
+    </resultMap>
+
+    <select id="getsByUserId" parameterType="java.lang.String" resultMap="roleResult">
+        SELECT t1.* FROM `role` t1 LEFT OUTER JOIN `role_role_link` t2 ON
+        t1.`id`=t2.`role_id` WHERE t2.`user_id`=#{userId}
+    </select>
+</mapper>

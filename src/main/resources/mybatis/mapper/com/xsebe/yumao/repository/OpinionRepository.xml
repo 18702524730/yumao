@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.OpinionRepository">
+    <insert id="addUserProvideMessage">
+        INSERT INTO `user_provide_message`
+        (`id`,`user_id`,`title`,`content`,`contants_email`,`contants_telphone`,`record_time`)
+        VALUES
+        (#{userProvideMessage.id},#{userProvideMessage.userId},
+        #{userProvideMessage.title},#{userProvideMessage.content},
+        #{userProvideMessage.contantsEmail},#{userProvideMessage.contantsTelphone},NOW())
+    </insert>
+
+</mapper>

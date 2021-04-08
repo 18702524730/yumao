@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.EvidChainNodeOriginalWorksRepository">
+    <resultMap id="evidChainNodeOriginalWorksResult" type="EvidChainNodeOriginalWorks">
+        <id property="id" column="id" />
+        <result property="sort" column="sort" />
+        <result property="createdTime" column="created_time" />
+        <result property="deleteFlag" column="delete_flag" />
+        <association property="evidChain" column="evid_chain_node_id" select="com.xsebe.yumao.repository.EvidChainRepository.get"></association>
+        <association property="evidChainCategoryNode" column="evid_chain_category_node_id" select="com.xsebe.yumao.repository.EvidChainCategoryNodeRepository.get"></association>
+        <association property="originalWorks" column="original_works_id" select="com.xsebe.yumao.repository.OriginalWorksRepository.get"></association>
+    </resultMap>
+
+    <select id="get" resultMap="evidChainNodeOriginalWorksResult">
+        SELECT * FROM `evid_chain_node_original_works` WHERE `id` = #{id}
+    </select>
+
+    <select id="getByChainId" resultMap="evidChainNodeOriginalWorksResult">
+        SELECT * FROM `evid_chain_node_original_works` WHERE `evid_chain_node_id` = #{id}
+    </select>
+
+    <insert id="add">
+        INSERT INTO `evid_chain_node_original_works`
+        (id,evid_chain_node_id,evid_chain_category_node_id,original_works_id,sort,created_time,delete_flag)
+        VALUES
+        <foreach collection="list" item="nodeWork" open="(" separator="),(" close=")">
+            #{nodeWork.id},#{nodeWork.evidChain.id},#{nodeWork.evidChainCategoryNode.id},
+            #{nodeWork.originalWorks.id},#{nodeWork.sort},#{nodeWork.createdTime},#{nodeWork.deleteFlag}
+        </foreach>
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM `evid_chain_node_original_works` WHERE
+        `evid_chain_node_id` = #{chainId} AND `evid_chain_category_node_id` = #{nodeId} AND `original_works_id` =
+        #{originalWorksId}
+    </delete>
+
+    <select id="getByChainIdGruopByNodeId" resultMap="evidChainNodeOriginalWorksResult">
+        SELECT * FROM `evid_chain_node_original_works` WHERE
+        evid_chain_node_id = #{chainId} AND delete_flag = 2
+        GROUP BY `evid_chain_category_node_id`
+    </select>
+</mapper>

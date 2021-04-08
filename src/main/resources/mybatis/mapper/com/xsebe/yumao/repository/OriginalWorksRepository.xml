@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.OriginalWorksRepository">
+    <parameterMap id="originalWorksParameter" type="OriginalWorks" />
+
+    <resultMap id="originalWorksResult" type="OriginalWorks">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="category" column="category" />
+        <result property="type" column="type" />
+        <result property="creationTime" column="creation_time" />
+        <result property="protectionStatus" column="protection_status" />
+        <result property="uploadingTime" column="uploading_time" />
+        <result property="protectionTime" column="protection_time" />
+    </resultMap>
+
+
+    <resultMap id="originalWorksResultForList" type="OriginalWorks">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="category" column="category"/>
+        <result property="type" column="type"/>
+        <result property="creationTime" column="creation_time"/>
+        <result property="protectionStatus" column="protection_status"/>
+        <result property="uploadingTime" column="uploading_time"/>
+        <result property="protectionTime" column="protection_time"/>
+
+        <association property="originalWorksFile" javaType="com.xsebe.yumao.model.OriginalWorksFile">
+            <id property="id" column="wf_id"/>
+            <result property="name" column="wf_name"/>
+            <result property="uri" column="wf_uri"/>
+            <result property="fxFileKey" column="wf_fx_file_key"/>
+        </association>
+
+        <association property="originalWorksCredentialFile" javaType="com.xsebe.yumao.model.OriginalWorksCredentialFile">
+            <id property="id" column="cf_id"/>
+            <result property="name" column="cf_name"/>
+            <result property="uri" column="cf_uri"/>
+            <result property="category" column="cf_category"/>
+        </association>
+    </resultMap>
+
+    <parameterMap id="originalWorksFxServiceConfigParameter" type="OriginalWorksFxServiceConfig" />
+
+    <resultMap id="originalWorksFxServiceConfigResult" type="OriginalWorksFxServiceConfig">
+        <id property="id" column="id" />
+        <result property="fx_evid_id" column="fxEvidId" />
+        <result property="fx_work_id" column="fxWorkId" />
+        <association property="originalWorks" column="original_works_id" select="com.xsebe.yumao.repository.OriginalWorksRepository.get" />
+    </resultMap>
+
+    <parameterMap id="originalWorksFileParameter" type="OriginalWorksFile" />
+
+    <resultMap id="originalWorksFileResult" type="OriginalWorksFile">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="uri" column="uri" />
+        <result property="fxFileKey" column="fx_file_key" />
+        <association property="originalWorks" column="original_works_id" select="com.xsebe.yumao.repository.OriginalWorksRepository.get" />
+    </resultMap>
+
+    <parameterMap id="originalWorksCredentialFileParameter" type="OriginalWorksCredentialFile" />
+
+    <resultMap id="originalWorksCredentialFileResult" type="OriginalWorksCredentialFile">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="uri" column="uri" />
+        <result property="category" column="category" />
+        <association property="originalWorks" column="original_works_id" select="com.xsebe.yumao.repository.OriginalWorksRepository.get" />
+    </resultMap>
+
+    <select id="get" parameterType="java.lang.String" resultMap="originalWorksResult">
+        SELECT t1.* FROM `original_works` t1 WHERE t1.`id`=#{id}
+    </select>
+
+    <select id="getList" resultMap="originalWorksResult">
+        SELECT t1.* FROM `original_works` t1 WHERE t1.`id`IN
+        <foreach collection="ids" item="ids" open="(" close=")" separator=",">
+            #{ids}
+        </foreach>
+    </select>
+
+    <select id="getTotal" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM `original_works` t2 INNER JOIN (
+        SELECT t1.`original_works_id`
+        FROM
+        `user_original_works_link`
+        t1 WHERE t1.`user_id`=#{user_id}
+        ) t3 ON
+        t2.`id`=t3.`original_works_id`
+        WHERE 1=1
+        <if test="ids != null and ids.size()>0">
+            AND t2.`id` IN
+            <foreach collection="ids" item="ids" index="index" open="(" close=")" separator=",">
+                #{ids}
+            </foreach>
+        </if>
+        <if test="name!=null and name!=''">
+            AND t2.`name` LIKE '%${name}%'
+        </if>
+        <if test="addToNode">
+            AND t2.`id` NOT IN (
+            SELECT t1.original_works_id FROM `evid_chain_node_original_works` t1
+            JOIN evid_chain t2 ON t1.evid_chain_node_id = t2.id
+            AND t2.user_id = #{user_id} AND t2.`delete_flag` = 2
+            GROUP BY t1.original_works_id)
+        </if>
+    </select>
+
+    <select id="getsByLimit" parameterType="java.util.List" resultMap="originalWorksResultForList">
+        select t2.*,c.id wf_id,c.name wf_name ,c.uri wf_uri,c.fx_file_key wf_fx_file_key,
+        d.id cf_id,d.name cf_name ,d.uri cf_uri,d.category cf_category
+        from original_works t2
+        LEFT JOIN user_original_works_link b on b.original_works_id=t2.id
+        LEFT JOIN original_works_file c on c.`original_works_id`=t2.id
+        LEFT JOIN`original_works_credential_file` d on d.`original_works_id`=t2.id
+        where b.`user_id`=#{user_id}
+        <if test="ids != null and ids.size()>0">
+            AND t2.`id` IN
+            <foreach collection="ids" item="ids" index="index" open="(" close=")" separator=",">
+                #{ids}
+            </foreach>
+        </if>
+        <if test="name!=null and name!=''">
+            AND t2.`name` LIKE '%${name}%'
+        </if>
+        <if test="addToNode">
+            AND t2.`id` NOT IN (
+            SELECT t1.original_works_id FROM `evid_chain_node_original_works` t1
+            JOIN user_original_works_link t2 ON t1.original_works_id =
+            t2.original_works_id
+            AND t2.user_id = #{user_id}
+            GROUP BY t1.original_works_id)
+        </if>
+        ORDER BY `uploading_time` DESC LIMIT ${offset},${limit}
+    </select>
+
+    <select id="getFileStates" resultMap="originalWorksResult">
+        select ow.`id`,ow.`protection_status` from
+        `original_works` ow join `user_original_works_link` uowl on ow.`id` = uowl.`original_works_id`
+        where uowl.`user_id` =#{user_id}
+        <!-- select ow.`id`,ow.`protection_status`,owf.`uri` from `original_works` ow join `user_original_works_link` uowl on ow.`id` = uowl.`original_works_id` join `original_works_file` 
+            owf on owf.`original_works_id` = ow.`id` where uowl.`user_id` =#{user_id} -->
+    </select>
+
+    <select id="getTotalForTask" parameterType="java.lang.Integer" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM `original_works` t1 WHERE
+        t1.`protection_status`=#{protectionStatus}
+    </select>
+
+    <select id="getsByLimitForTask" resultMap="originalWorksResult">
+        SELECT t1.* FROM `original_works` t1 WHERE t1.`protection_status`=#{protectionStatus} LIMIT
+        ${offset},${limit}
+    </select>
+
+    <select id="getByFxServiceConfig" parameterType="java.lang.String" resultMap="originalWorksResult">
+        SELECT t2.* FROM `original_works` t2 INNER JOIN (
+        SELECT
+        t1.`original_works_id` FROM
+        `original_works_fxservice_config`
+        t1
+        WHERE t1.`fx_evid_id`=#{fxEvidId}
+        ) t3 ON
+        t2.`id`=t3.`original_works_id`
+    </select>
+
+    <select id="getFxServiceConfig" parameterType="java.lang.String" resultMap="originalWorksFxServiceConfigResult">
+        SELECT t1.* FROM `original_works_fxservice_config` t1 WHERE
+        t1.`original_works_id`=#{id}
+    </select>
+
+    <select id="getFiles" resultMap="originalWorksFileResult">
+        SELECT t1.* FROM `original_works_file` t1 WHERE t1.`original_works_id`=#{id}
+    </select>
+
+    <select id="getCredentialFiles" resultMap="originalWorksCredentialFileResult">
+        SELECT t1.* FROM `original_works_credential_file` t1 WHERE t1.`original_works_id`=#{id}
+    </select>
+
+    <select id="getByTortInfoId" resultMap="originalWorksResult">
+        SELECT t1.* FROM `original_works` t1 JOIN `tort_info_original_works` t2 ON t1.`id` = t2.`original_works_id`
+        WHERE t2.`tort_info_id`
+        = #{tortInfoId}
+    </select>
+
+    <select id="listFileByTortInfoId" resultMap="originalWorksFileResult">
+        SELECT * FROM `original_works_file` t1 JOIN `tort_info_original_works` t2 ON t1.`original_works_id` = t2.`original_works_id`
+        WHERE t2.`tort_info_id` = #{tortInfoId}
+    </select>
+
+    <select id="getListByTortInfoId" resultMap="originalWorksResult">
+        SELECT t1.* FROM `original_works` t1 JOIN `tort_info_original_works` t2 ON t1.`id` = t2.`original_works_id`
+        WHERE
+        t2.`tort_info_id` = #{tortInfoId}
+    </select>
+
+    <select id="countByName" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM `original_works` t1 JOIN `user_original_works_link` t2 ON t1.`id` = t2.`original_works_id`
+        WHERE t1.`name` =
+        #{name} AND t2.`user_id` = #{userId}
+    </select>
+
+    <insert id="add" parameterMap="originalWorksParameter">
+        INSERT INTO `original_works`
+        (`id`,`name`,`category`,`type`,`creation_time`,`protection_status`,`uploading_time`,`protection_time`)
+        VALUES
+        (#{originalWorks.id}, #{originalWorks.name},
+        #{originalWorks.category},#{originalWorks.type},#{originalWorks.creationTime},#{originalWorks.protectionStatus},#{originalWorks.uploadingTime},#{originalWorks.protectionTime})
+    </insert>
+
+    <insert id="addFxServiceConfig" parameterMap="originalWorksFxServiceConfigParameter">
+        INSERT INTO `original_works_fxservice_config` (`id`,`original_works_id`,`fx_evid_id`,`fx_work_id`)
+        VALUES
+        (#{originalWorksFxServiceConfig.id},#{originalWorksFxServiceConfig.originalWorks.id}, #{originalWorksFxServiceConfig.fxEvidId},
+        #{originalWorksFxServiceConfig.fxWorkId})
+    </insert>
+
+    <insert id="addFile" parameterMap="originalWorksFileParameter">
+        INSERT INTO `original_works_file` (`id`,`original_works_id`,`name`,`uri`,`fx_file_key`)
+        VALUES
+        (#{originalWorksFile.id},
+        #{originalWorksFile.originalWorks.id},
+        #{originalWorksFile.name},#{originalWorksFile.uri},#{originalWorksFile.fxFileKey})
+    </insert>
+
+    <insert id="addUserLink">
+        INSERT INTO `user_original_works_link` (`user_id`,`original_works_id`)
+        VALUES
+        (#{userId}, #{originalWorksId})
+    </insert>
+
+    <insert id="addCredentialFile" parameterMap="originalWorksCredentialFileParameter">
+        INSERT INTO `original_works_credential_file` (`id`,`original_works_id`,`name`,`uri`,`category`)
+        VALUES
+        (#{originalWorksCredentialFile.id},
+        #{originalWorksCredentialFile.originalWorks.id},
+        #{originalWorksCredentialFile.name},#{originalWorksCredentialFile.uri},#{originalWorksCredentialFile.category})
+    </insert>
+
+    <update id="updateUploadingProtectionStatus">
+        UPDATE `original_works` t1 SET t1.`protection_status`=#{protectionStatus},t1.`uploading_time`=#{uploadingTime} WHERE t1.`id`=#{id}
+    </update>
+
+    <update id="updateProtectingProtectionStatus">
+        UPDATE `original_works` t1 SET t1.`protection_status`=#{protectionStatus},t1.`protection_time`=#{protectionTime} WHERE t1.`id`=#{id}
+    </update>
+
+    <update id="updateUploadingFailureProtectionStatus">
+        UPDATE `original_works` t1 SET t1.`protection_status`=#{protectionStatus},t1.`uploading_time`=#{uploadingTime} WHERE t1.`id`=#{id}
+    </update>
+
+    <update id="updateFxServiceConfig" parameterMap="originalWorksFxServiceConfigParameter">
+        UPDATE `original_works_fxservice_config` t1 SET
+        t1.`fx_evid_id`=#{originalWorksFxServiceConfig.fxEvidId},t1.`fx_work_id`=#{originalWorksFxServiceConfig.fxWorkId} WHERE
+        t1.`id`=#{originalWorksFxServiceConfig.id}
+    </update>
+
+    <select id="selectAllFailureWorksForCredentialFile" resultType="com.xsebe.yumao.model.OriginalWorksVO">
+        SELECT a.*,b.fx_evid_id fxEvidId from original_works a
+        LEFT JOIN original_works_fxservice_config b on a.id=b.original_works_id
+        LEFT JOIN original_works_credential_file c on a.id=c.original_works_id
+        where c.id is NULL and a.protection_status=3 ORDER BY a.uploading_time ASC
+    </select>
+
+    <select id="getFileByChainId" resultMap="originalWorksFileResult">
+        SELECT t1.* FROM `original_works_file` t1
+        JOIN original_works t2 ON t1.original_works_id = t2.id
+        JOIN
+        evid_chain_node_original_works t3 ON t2.id = t3.original_works_id
+        AND t3.evid_chain_node_id = #{chainId} AND t3.delete_flag = 2
+    </select>
+
+    <select id="getFileByChainIdAndNodeId" resultMap="originalWorksFileResult">
+        SELECT t1.* FROM `original_works_file` t1
+        JOIN original_works t2 ON t1.original_works_id = t2.id
+        JOIN
+        evid_chain_node_original_works t3 ON t2.id = t3.original_works_id
+        AND t3.evid_chain_node_id = #{chainId} AND t3.evid_chain_category_node_id = #{nodeId} AND t3.delete_flag =
+        2
+    </select>
+</mapper>

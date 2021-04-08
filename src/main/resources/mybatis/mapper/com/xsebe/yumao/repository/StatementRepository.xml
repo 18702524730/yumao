@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.StatementRepository">
+
+    <resultMap id="statementResult" type="Statement">
+        <id property="id" column="id" />
+        <result property="stopName" column="stop_name" />
+        <result property="no" column="no" />
+        <result property="fileName" column="file_name" />
+        <result property="fileContentHex" column="file_content_hex" />
+        <result property="createdTime" column="created_time" />
+        <result property="shopUrl" column="shop_url" />
+        <association property="user" column="user_id" select="com.xsebe.yumao.repository.UserRepository.get" />
+    </resultMap>
+
+    <select id="get" resultMap="statementResult">
+        SELECT * FROM `statement` t1 WHERE t1.`id`=#{id}
+    </select>
+    
+    <select id="getsByUserId" resultMap="statementResult">
+        SELECT t1.* FROM `statement` t1 WHERE t1.`user_id`=#{userId}
+    </select>
+
+    <insert id="add">
+        INSERT INTO `statement`
+        (`id`,`user_id`,`stop_name`,`no`,`file_name`,`file_content_hex`,`created_time`,`shop_url`)
+        VALUES (#{statement.id}, #{statement.user.id},
+        #{statement.stopName},#{statement.no},#{statement.fileName},#{statement.fileContentHex},#{statement.createdTime},#{statement.shopUrl})
+    </insert>
+    
+    <update id="updateShopUrl">
+        UPDATE `statement` SET `shop_url` = #{url} WHERE `id` = #{id}
+    </update>
+</mapper>

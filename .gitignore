@@ -1,0 +1,13 @@
+
+# Eclipse
+/.classpath
+/.project
+/.settings/
+/bin/
+/src/main/webapp/WEB-INF/classes/
+/target/
+
+# IntelliJ IDEA
+/.idea/
+*.iml
+/target/

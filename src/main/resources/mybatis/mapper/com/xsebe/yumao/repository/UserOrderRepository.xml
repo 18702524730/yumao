@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.UserOrderRepository">
+    <parameterMap id="userOrderParameter" type="UserOrder" />
+
+    <resultMap id="userOrderResult" type="UserOrder">
+        <id property="id" column="id" />
+        <result property="outTradeNo" column="out_trade_no" />
+        <result property="subject" column="subject" />
+        <result property="totalPrice" column="total_price" />
+        <result property="body" column="body" />
+        <result property="tradeStatus" column="trade_status" />
+        <result property="status" column="status" />
+        <result property="creationTime" column="creation_time" />
+        <result property="paymentTime" column="payment_time" />
+        <result property="paymentClosedTime" column="payment_closed_time" />
+        <result property="paymentWay" column="payment_way" />
+        <association property="user" column="user_id" select="com.xsebe.yumao.repository.UserRepository.get" />
+    </resultMap>
+
+    <parameterMap id="userOrderServicePricePackageParameter" type="UserOrderServicePricePackage" />
+
+    <resultMap id="userOrderServicePricePackageResult" type="UserOrderServicePricePackage">
+        <id property="id" column="id" />
+        <result property="startTime" column="start_time" />
+        <result property="endTime" column="end_time" />
+        <result property="status" column="status" />
+        <result property="creationTime" column="creation_time" />
+        <result property="openedTime" column="opened_time" />
+        <result property="expiredTime" column="expired_time" />
+        <result property="name" column="name" />
+        <result property="byTimeType" column="by_time_type" />
+        <result property="validTimes" column="valid_times" />
+        <result property="unitPrice" column="unit_price" />
+        <result property="price" column="price" />
+        <result property="totalSpace" column="total_space" />
+        <result property="freeSpace" column="free_space" />
+        <result property="orderType" column="order_type" />
+        <association property="userOrder" column="order_id" select="com.xsebe.yumao.repository.UserOrderRepository.get" />
+        <association property="userOrderService" column="user_order_service_id" select="com.xsebe.yumao.repository.UserOrderRepository.getUserOrderService" />
+    </resultMap>
+
+    <parameterMap id="userOrderServiceParameter" type="UserOrderService" />
+
+    <resultMap id="userOrderServiceResult" type="UserOrderService">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+    </resultMap>
+
+    <select id="get" parameterType="java.lang.String" resultMap="userOrderResult">
+        SELECT * FROM `user_order` t1 WHERE t1.`id`=#{id}
+    </select>
+
+    <select id="getUserOrderService" resultMap="userOrderServiceResult">
+        SELECT t1.* FROM `user_order_service` t1 WHERE t1.`id`=#{userOrderServiceId}
+    </select>
+
+    <select id="getUserOrderServiceByName" resultMap="userOrderServiceResult">
+        SELECT t1.* FROM `user_order_service` t1 WHERE t1.`name`=#{name} LIMIT 0,1
+    </select>
+    
+    <select id="getOrderServicePricePackagePage" resultMap="userOrderServicePricePackageResult">
+    	select * from `user_order_service_price_package` spp join `user_order` uo on spp.`order_id`=uo.`id` 
+    	where uo.`out_trade_no`=#{outTradeNo}
+    </select>
+
+    <select id="getTotalForTask" parameterType="java.lang.Integer" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM
+        `user_order` t1 WHERE
+        t1.`status`=#{status}
+    </select>
+
+    <select id="getByLimitForTask" resultMap="userOrderResult">
+        SELECT t1.* FROM
+        `user_order` t1 WHERE
+        t1.`status`=#{status}
+        LIMIT ${offset},${limit}
+    </select>
+
+    <select id="getOrderServicePricePackageTotalByPayment" parameterType="java.lang.Integer" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM
+        `user_order_service_price_package` t3 INNER JOIN
+        (SELECT t1.`id` FROM
+        `user_order` t1 WHERE t1.`status`=2) t2
+        ON t2.`id`=t3.`order_id`
+    </select>
+
+    <select id="getOrderServicePricePackagesByPaymentAndLimit" resultMap="userOrderServicePricePackageResult">
+        SELECT t3.* FROM
+        `user_order_service_price_package` t3 INNER JOIN (SELECT t1.`id`
+        FROM
+        `user_order` t1
+        WHERE t1.`status`=2) t2
+        ON t2.`id`=t3.`order_id` LIMIT ${offset},${limit}
+    </select>
+
+    <select id="getOrderServicePricePackage" parameterType="java.lang.String" resultMap="userOrderServicePricePackageResult">
+        SELECT * FROM `user_order_service_price_package` t1 WHERE t1.`id`=#{id}
+    </select>
+
+    <select id="getOrderServicePricePackageByStatus" resultType="java.lang.Long">
+        select COUNT(1) from user_order_service_price_package a LEFT JOIN user_order b on a.order_id=b.id
+        where b.`user_id`=#{user_id} and b.`status`=2 and a.`status`= #{ppstatus}
+    </select>
+
+
+    <select id="getOrderServicePricePackage4User" resultType="java.lang.Long">
+        select COUNT(1) from user_order_service_price_package a LEFT JOIN user_order b on a.order_id=b.id
+        where b.`user_id`=#{user_id} and b.`status`=2 and a.`status` in (2,3)
+    </select>
+
+    <select id="getByOutTradeNo" parameterType="java.lang.String" resultMap="userOrderResult">
+        SELECT * FROM `user_order` t1 WHERE t1.`out_trade_no`=#{out_trade_no}
+    </select>
+
+    <select id="getOpenOrderServicePricePackages" resultMap="userOrderServicePricePackageResult">
+        SELECT t3.* FROM
+        `user_order_service_price_package` t3 INNER JOIN (SELECT t1.`id` FROM
+        `user_order` t1 WHERE
+        t1.`user_id`=#{user_id} AND t1.`status`=2) t2
+        ON t2.`id`=t3.`order_id` AND t3.`status`=2
+    </select>
+
+    <insert id="add" parameterMap="userOrderParameter">
+        INSERT INTO `user_order`
+        (`id`,`user_id`,`out_trade_no`,`subject`,`total_price`,`body`,`trade_status`,`status`,`creation_time`,
+        `payment_time`,`payment_closed_time`,`payment_way`,`order_type`)
+        VALUES
+        (#{user_order.id},
+        #{user_order.user.id},
+        #{user_order.outTradeNo},#{user_order.subject},#{user_order.totalPrice},#{user_order.body},
+        #{user_order.tradeStatus},#{user_order.status},#{user_order.creationTime},#{user_order.paymentTime},
+        #{user_order.paymentClosedTime},#{user_order.paymentWay},#{user_order.orderType})
+    </insert>
+
+    <insert id="addOrderServicePricePackage" parameterMap="userOrderServicePricePackageParameter">
+        INSERT INTO `user_order_service_price_package`
+        (`id`,`order_id`,`user_order_service_id`,`start_time`,`end_time`,`status`,`creation_time`,`opened_time`,
+        `expired_time`,`name`,`by_time_type`,`valid_times`,`unit_price`,`price`,`total_space`,`free_space`,`order_type`)
+        VALUES
+        (#{user_order_service_price_package.id},#{user_order_service_price_package.userOrder.id},
+        #{user_order_service_price_package.userOrderService.id},
+        #{user_order_service_price_package.startTime},#{user_order_service_price_package.endTime},
+        #{user_order_service_price_package.status},#{user_order_service_price_package.creationTime},
+        #{user_order_service_price_package.openedTime},#{user_order_service_price_package.expiredTime},
+        #{user_order_service_price_package.name},#{user_order_service_price_package.byTimeType},
+        #{user_order_service_price_package.validTimes},#{user_order_service_price_package.unitPrice},
+        #{user_order_service_price_package.price},#{user_order_service_price_package.totalSpace},
+        #{user_order_service_price_package.freeSpace},#{user_order_service_price_package.orderType})
+    </insert>
+
+    <insert id="addUserOrderService" parameterMap="userOrderServiceParameter">
+        INSERT INTO `user_order_service`
+        (`id`,`name`)
+        VALUES
+        (#{userOrderService.id},#{userOrderService.name})
+    </insert>
+
+    <update id="updatePaymentStatus">
+        UPDATE `user_order` t1 SET t1.`status`=#{status},t1.`payment_time`=#{payment_time} WHERE t1.`id`=#{id}
+    </update>
+
+    <update id="updatePaymentClosedStatus">
+        UPDATE `user_order` t1 SET t1.`status`=#{status},t1.`payment_closed_time`=#{payment_closed_time} WHERE t1.`id`=#{id}
+    </update>
+
+    <update id="updateOrderServicePricePackageOpenedStatus">
+        UPDATE `user_order_service_price_package` t1 SET t1.`status`=#{status},t1.`opened_time`=#{opened_time} WHERE
+        t1.`id`=#{orderServicePricePackage_id}
+    </update>
+
+    <update id="updateOrderServicePricePackageExpiredStatus">
+        UPDATE `user_order_service_price_package` t1 SET t1.`status`=#{status},t1.`expired_time`=#{expired_time} WHERE
+        t1.`id`=#{orderServicePricePackage_id}
+    </update>
+
+    <update id="updateFreeSpace">
+        UPDATE `user_order_service_price_package` t1 SET t1.`free_space`=#{freeSpace} WHERE
+        t1.`id`=#{orderServicePricePackage_id}
+    </update>
+
+    <select id="getOpenOrderServicePricePackages4Newest" resultMap="userOrderServicePricePackageResult">
+        select a.* from user_order_service_price_package a LEFT JOIN user_order b on a.order_id=b.id
+        where b.`user_id`=#{user_id} and b.`status`=2 and a.`status` =2
+        ORDER BY end_time desc LIMIT 1
+    </select>
+
+    <select id="getOpenOrderServicePricePackages4Close" resultMap="userOrderServicePricePackageResult">
+        select a.* from user_order_service_price_package a LEFT JOIN user_order b on a.order_id=b.id
+        where b.`user_id` in (
+        SELECT a.user_id from user_order a LEFT JOIN user_order_service_price_package b on b.order_id=a.id
+        WHERE b.id=#{package_id}
+        ) and b.`status`=2 and a.`status` =2
+        ORDER BY end_time desc
+    </select>
+
+
+</mapper>

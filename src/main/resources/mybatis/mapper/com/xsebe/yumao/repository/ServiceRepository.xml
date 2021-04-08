@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.ServiceRepository">
+    <parameterMap id="serviceParameter" type="Service" />
+
+    <resultMap id="serviceResult" type="Service">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+    </resultMap>
+
+    <resultMap id="servicePricePackageResult" type="ServicePricePackage">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="byTimeType" column="by_time_type" />
+        <result property="validTimes" column="valid_times" />
+        <result property="unitPrice" column="unit_price" />
+        <result property="price" column="price" />
+        <result property="totalSpace" column="total_space" />
+        <association property="service" column="service_id" select="com.xsebe.yumao.repository.ServiceRepository.get" />
+    </resultMap>
+
+    <select id="get" parameterType="java.lang.String" resultMap="serviceResult">
+        SELECT t1.* FROM `service` t1 WHERE t1.`id`=#{id}
+    </select>
+
+    <select id="getPricePackage" parameterType="java.lang.String" resultMap="servicePricePackageResult">
+        SELECT t1.* FROM `service_price_package` t1 WHERE t1.`id`=#{price_package_id}
+    </select>
+    
+    <select id="getPricePackageTotal" resultType="java.lang.Long">
+        SELECT COUNT(1) FROM `service_price_package` t1
+    </select>
+
+    <select id="getPricePackagesByLimit" resultMap="servicePricePackageResult">
+        SELECT t1.* FROM `service_price_package` t1 LIMIT ${offset},${limit}
+    </select>
+</mapper>

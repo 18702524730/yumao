@@ -1,0 +1,149 @@
+
+
+
+/*	新增修改*//*	新增修改*//*	新增修改*//*	新增修改*/
+/*	新增修改*//*	新增修改*//*	新增修改*/
+
+.container{
+	width:1200px;
+	
+	
+}
+/*	新增修改*//*	新增修改*//*	新增修改*/
+
+.col-lg-offset-4{
+	margin-left:33.33%;
+} 
+
+/*	新增修改*//*	新增修改*//*	新增修改*/
+
+.btn{
+	border-radius:0px;
+	
+}
+/*	新增修改*//*	新增修改*//*	新增修改*/
+.form-control{
+	width:304px;
+	height:40px;
+	margin-left:20px;
+}
+
+
+
+
+
+
+
+
+.container-page-content-column {
+    padding: 30px 50px 60px 50px;
+    background-size: 100% 100%;
+/*	修改*/
+/*	修改*/
+/*	修改*/
+/*	修改*/
+/*	修改*/
+/*	修改*/
+/*	修改*/
+/*	修改*/
+    background-image: url(../images/bg_yinying.png);
+	
+}
+
+
+/*修改*/
+/*修改*/
+/*修改*/
+/*修改*/
+/*修改*/
+.selected-block {
+    padding: 8px 20px 8px 20px;
+    border-bottom: 1px solid #0158a3;
+	width:133px;
+	height:50px;
+	margin:0px 12px 0px 22px;
+	font-size:16px;
+}
+
+
+/*修改*//*修改*//*修改*//*修改*//*修改*/
+/*修改*//*修改*/
+/*修改*//*修改*/
+/*修改*//*修改*/
+
+.unselected-block {
+    padding: 8px 20px 8px 20px;
+    border-bottom: 1px solid #FFFFFF;
+	width:133px;
+	height:50px;
+	margin:0px 12px 0px 22px;
+	color:#bbb;
+	font-size:16px;
+}
+
+/*修改*//*修改*/
+/*修改*//*修改*/
+/*修改*//*修改*/
+
+a.color-link, button.color-link {
+    margin-left:6px;
+	padding:0px;
+}
+
+/*修改*//*修改*/
+/*修改*//*修改*/
+/*修改*//*修改*/
+.input-group-btn:last-child > .btn, .input-group-btn:last-child > .btn-group{
+	left:-22px;
+	z-index:3;
+}
+
+/*修改*//*修改*/
+/*修改*//*修改*/
+/*修改*//*修改*/
+.content-title {
+    font-size: 18px;
+}
+/*修改*//*修改*/
+/*修改*//*修改*/
+/*修改*//*修改*/
+
+
+
+.mt-30 {
+    margin-top: 25px;
+}
+
+
+
+
+
+/*修改*/
+/*修改*/
+/*修改*/
+/*修改*/
+/*修改*/
+/*修改*/
+/*修改*/
+
+
+.mt-40 {
+    margin-top: 34px;
+}
+
+
+
+/*修改*/
+/*修改*/
+/*修改*/
+/*修改*/
+/*修改*/
+
+.pt-40 {
+   padding:0px;
+   margin-top:20px;
+}
+
+
+
+

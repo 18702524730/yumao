@@ -1,0 +1,107 @@
+@charset "utf-8";
+/* CSS Document */
+
+.modal-header{
+	background:#F7F7F7;
+	border:0px;
+	height:43px;
+	padding:0px;
+}
+.modal-header>button{
+	margin-right:14px;
+	
+}
+.modal-header .close{
+		margin-top:5px;
+
+}
+.modal-header>h4{
+	margin-top:8px;
+	margin-left:20px;
+	
+}
+
+.modal-body{
+	padding:0px;
+}
+
+.modal-footer{
+	border:0px;
+	text-align: center
+}
+.modal-footer>.btn-primary{
+	background:#479CFF;
+	border:1px solid #333333;
+	text-align: center;
+	height:50px;
+	line-height: 50px;
+	width:207px;
+	border-radius: 25px;
+	padding:0px;
+	color: #fff;
+	
+}
+
+.form-horizontal .control-label{
+	
+	padding-top: 9px;
+}
+.btn-primary>b{
+	font-size:16px;
+	color:#fff;
+}
+.modal-title>b{
+	font-size:18px;
+	color:#444444;
+}
+
+
+.real-pad{
+	padding:0px;
+	
+}
+
+.real-pad>input{
+	height:40px;
+	border-radius:0px;
+}
+.col-xs-4{
+	font-size:15px;
+	font-weight:400;
+	color:#000;
+/*	padding-right:0px;*/
+}
+
+
+
+
+
+.table>tbody>tr{
+	height:50px;
+
+}
+.table>tbody>tr>td{
+	line-height: 33px;
+	border-bottom:1px solid #ddd;
+	border-top:0px;
+	font-size:14px;
+	color:#A3A6B4;
+
+}
+
+.table>tbody>.top>td{
+	border:0px;
+	line-height:33px;
+	font-size:16px;
+	color:#A3A6B4;
+	font-weight: 600;
+}
+
+.checkbox>label>input{
+	margin-top:9px;
+}
+.checkbox{
+	margin:0px;
+}
+
+

@@ -1,0 +1,230 @@
+@charset "utf-8";
+/* CSS Document */
+*{
+	padding:0px;
+	margin:0px;
+	list-style: none;
+	text-decoration:none;
+}
+
+
+
+.interval-top{
+	margin-top:30px;
+}
+.interval-left{
+	margin-left:30px;
+}
+.interval-right{
+	margin-right:30px;
+}
+.interval-bottom{
+	margin-bottom:30px;
+}
+
+
+
+
+
+/*导航*/
+
+#nav{
+	width:100%;
+	background:#fff;
+	height:88px;
+	box-shadow: 0 1px 18px 0 rgba(175,175,175,0.1)
+}
+#nav>div{
+	width:1200px;
+	height:88px;
+	margin:0 auto;
+}
+.logo{
+	float:left;
+	line-height:88px;
+	
+}
+.top-nav{
+	float:right;
+	line-height:88px;
+}
+.top-nav>li{
+	float:left;
+	margin-right:30px;
+}
+
+.top-nav>li>a{
+	font-size:16px;
+	color:#333;
+}
+
+
+/*面板*/
+
+#Data-panel{
+	width:1200px;
+	margin:0 auto;
+	border:1px solid #eee;
+	height:224px;
+}
+
+.user{
+	float:left;
+	width:429px;
+	height:223px;
+	background:url(./../images/profile/bg.svg);
+}
+.u-head{
+	background:#fff;
+	width:114px;
+	height:114px;
+	border-radius:50%;
+	margin-top:53px;
+	margin-left:30px;
+	float:left;
+/*	display:inline-block;*/
+}
+
+.u-head>div{
+	width:104px;
+	height:104px;
+	margin-top:5px;
+	margin-left:5px;
+}
+.u-namer{
+	float: left;
+	margin-top: 53px;
+	margin-left: 20px;
+}
+
+.u-namer>b{
+	color: #fff;
+    font-size: 18px;
+}
+.u-namer>p{
+	color:#fff;
+	margin-top:10px;
+	margin-bottom:15px;
+	font-size:14px;
+
+}
+.u-namer>div{
+	width:134px;
+	height:36px;
+	background:#fff;
+	border-radius: 18px;
+	text-align:center;
+	
+}
+.u-namer>div>a{
+	color:#333;
+	font-size:14px;
+	line-height: 36px;
+	
+}
+.u-data{
+	float:left;
+}
+
+.u-d-1{
+	float:left;
+	width:256px;
+	text-align: center;
+	margin-top:63px;
+}
+
+.u-d-1>b{
+	font-size:30px;
+	
+}
+.u-d-1>p{
+	font-size:16px;
+	margin-top:25px;
+}
+
+
+/*服务*/
+
+#service{
+	width:1200px;
+	margin:0 auto;
+	margin-top:.30px;
+	height:551px;
+	margin-bottom:80px;
+/*	background:#FFA9AA;*/
+}
+
+.s-content{
+	width:380px;
+	height:467px;
+	float:left;
+	margin-right:30px;
+/*	position:relative;*/
+	border:1px solid #eee;
+}
+
+.s-c-title{
+	width:147px;
+	height:58px;
+	background:#fff;
+	position:relative;
+	left:114px;
+	top:-24px;
+	border:1px solid #eee;
+	text-align: center;
+	line-height: 52px;
+	
+}
+.s-c-title>b{
+	font-size:16px;
+	color:#666;
+}
+.s-c-icon{
+	margin:110px 0px 98px 155px;
+}
+
+.s-content>p{
+	margin-left:69px;
+	font-size: 14px;
+	color:#979797;
+}
+
+
+.foot{
+	width:100%;
+	height:240px;
+	background:#FCFCFC;
+}
+
+
+
+
+/*悬停*/
+
+.s-content:hover{
+	cursor:pointer
+}
+
+.u-d-1:hover{
+	cursor:pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

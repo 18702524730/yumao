@@ -1,0 +1,154 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+*{
+	padding:0px;
+	margin:0px;
+	list-style: none;
+	text-decoration:none;
+}
+
+.logo{
+	float:left;
+	line-height:88px;
+	
+}
+.top-nav{
+	float:right;
+	line-height:88px;
+}
+.top-nav>li{
+	float:left;
+	margin-right:30px;
+}
+
+.top-nav>li>a{
+	font-size:16px;
+	color:#333;
+}
+
+.top-head{
+	float:left;
+}
+.user{
+	float:left;
+	margin:14px 0 0 20px;
+}
+.user>b{
+	font-size:18px;
+	color:#666666;
+}
+.user>p{
+	font-size:14px;
+	color:#666666;
+	margin-top:10px;
+}
+
+
+/*左导航*/
+
+.left-nav{
+	width:192px;
+	height:775px;
+	border:1px solid #eee;
+	float:left;
+}
+
+.l-n-user{
+	width:192px;
+	height:202px;
+	background:url(../../images/account/bg.svg);
+	overflow: hidden;
+}
+
+
+.l-n-service>div{
+	
+	width:192px;
+	height:26px;
+	margin-top:43px;
+	line-height: 26px;
+/*	text-align:center;*/
+}
+
+.l-n-service>div:hover{
+	cursor:pointer;
+}
+
+
+
+
+
+
+
+/*右内容*/
+.right-content{
+	width:1006px;
+	height:776px;
+
+	float:left;
+}
+
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover{
+	border:0px;
+}
+.nav-tabs > li > a:hover{
+	border:1px solid rgba(0,0,0,0)
+}
+.nav > li > a:focus, .nav > li > a:hover{
+	background:none;
+}
+
+.nav-tabs{
+	border-bottom:0px;
+}
+
+
+.control-label{
+	height:34px;
+	line-height:34px;
+	font-size:14px;
+	color:#979797;
+}
+
+.form-control-static{
+	font-size:14px ;
+	color:#979797;
+}
+
+.col-xs-3{
+	width:auto;
+	padding-right:0px;
+}
+
+
+.real-up{
+	text-align: center;
+	width:246px;
+	height:50px;
+	border:1px solid #707070;
+	border-radius: 44px;
+
+}
+
+.real-up>button{
+	line-height: 50px;
+	font-size:16px;
+	color:#fff;
+	font-weight: 500;
+	background: #479CFF;
+}
+.form-control{
+	height:40px;
+	border-radius:0px
+}
+
+.col-xs-4{
+	width:12%;
+}
+
+.mybluebtn{
+	width: 217px;height: 50px; border-radius: 25px;background-color: #479CFF;font-size: 16px; color: #fff;border: none;
+}

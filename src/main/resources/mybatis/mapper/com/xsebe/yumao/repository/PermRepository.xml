@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.PermRepository">
+    <parameterMap id="permParameter" type="Perm" />
+
+    <resultMap id="permResult" type="Perm">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="label" column="label" />
+    </resultMap>
+
+    <select id="getsByRoleId" parameterType="java.lang.String" resultMap="permResult">
+        SELECT t1.* FROM `perm` t1 LEFT OUTER JOIN `role_perm_link` t2 ON t1.`id`=t2.`perm_id` WHERE t2.`role_id`=#{roleId}
+    </select>
+</mapper>

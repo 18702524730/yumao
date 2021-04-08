@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE module PUBLIC
+  "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+  "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+
+    <property name="localeLanguage" value="zh_CN" />
+
+    <property name="charset" value="UTF-8" />
+
+    <module name="FileTabCharacter" />
+
+    <module name="RegexpSingleline">
+        <property name="format" value="System\.out\.println" />
+        <property name="message" value="代码中发现 System.out.println，去掉或改成日志打印。" />
+    </module>
+
+    <module name="RegexpSingleline">
+        <property name="format" value="System\.err\.println" />
+        <property name="message" value="代码中发现 System.err.println，去掉或改成日志打印。" />
+    </module>
+
+    <module name="FileLength">
+        <property name="max" value="3500" />
+        <property name="fileExtensions" value="java" />
+    </module>
+
+    <module name="TreeWalker">
+
+        <module name="UnusedImports">
+            <property name="processJavadoc" value="true" />
+        </module>
+        <module name="RedundantImport" />
+
+        <module name="EqualsHashCode" />
+
+        <module name="LineLength">
+            <property name="max" value="160" />
+        </module>
+
+        <module name="FinalParameters" />
+
+<!--         <module name="JavadocType"> -->
+<!--             <property name="allowUnknownTags" value="true" /> -->
+<!--             <message key="javadoc.missing" value="类注释：缺少Javadoc注释。" /> -->
+<!--         </module> -->
+
+<!--         <module name="JavadocMethod"> -->
+<!--             <property name="tokens" value="METHOD_DEF" /> -->
+<!--             <property name="allowMissingPropertyJavadoc" value="false" /> -->
+<!--             <message key="javadoc.missing" value="方法注释：缺少Javadoc注释。" /> -->
+<!--         </module> -->
+
+        <module name="RedundantThrows" />
+
+        <module name="SuperClone" />
+
+        <module name="ParameterAssignment" />
+    </module>
+</module>

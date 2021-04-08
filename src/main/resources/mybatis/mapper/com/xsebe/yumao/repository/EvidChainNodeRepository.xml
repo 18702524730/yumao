@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xsebe.yumao.repository.EvidChainNodeRepository">
+    <resultMap id="evidChainNodeResult" type="EvidChainNode">
+        <id property="id" column="id" />
+        <result property="name" column="name" />
+        <result property="isMasterPic" column="is_master_pic" />
+        <result property="sort" column="sort" />
+        <result property="createdTime" column="created_time" />
+        <result property="deleteFlag" column="delete_flag" />
+        <association property="evidChain" column="evid_chain_id" select="com.xsebe.yumao.repository.EvidChainRepository.get"></association>
+        <association property="evidChainCategoryNode" column="evid_chain_category_node_id" select="com.xsebe.yumao.repository.EvidChainCategoryNodeRepository.get"></association>
+    </resultMap>
+
+    <select id="getByChainId" resultMap="evidChainNodeResult">
+        SELECT * FROM `evid_chain_node` WHERE `evid_chain_id` = #{chainId} AND `delete_flag` = 2 ORDER BY `sort`
+    </select>
+
+    <insert id="add">
+        INSERT INTO `evid_chain_node`(id,evid_chain_id,evid_chain_category_node_id,name,is_master_pic,sort,created_time,delete_flag)
+        VALUES
+        <foreach collection="nodeList" item="node" open="(" separator="),(" close=")">
+            #{node.id},#{node.evidChain.id},#{node.evidChainCategoryNode.id},#{node.name},#{node.isMasterPic},#{node.sort},#{node.createdTime},#{node.deleteFlag}
+        </foreach>
+    </insert>
+    
+    <update id="deleteByChainId">
+        UPDATE `evid_chain_node` SET `delete_flag` = 1 WHERE `evid_chain_id` = #{id}
+    </update>
+    
+    <select id="get" resultMap="evidChainNodeResult">
+        SELECT * FROM `evid_chain_node` WHERE `id` = #{id}
+    </select>
+</mapper>
